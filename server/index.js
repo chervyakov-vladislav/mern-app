@@ -1,16 +1,20 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import * as dotenv from 'dotenv';
 
 import * as Validation from './vlidations/validations.js';
 import checkAuth from './utils/checkAuth.js';
 import { UserController, PostController } from './contrellers/index.js';
 
 // .env
-const login = 'vladislavech';
-const pass = 'PRsc8l1ppY7aiFBJ';
+dotenv.config();
+const login = process.env.DB_USER;
+const pass = process.env.DB_PASSWORD;
+const DBname = process.env.DB_NAME;
+const PORT = process.env.PORT || '3000';
 
 mongoose
-  .connect(`mongodb+srv://${login}:${pass}@cluster0.p4p8r5j.mongodb.net/blog?retryWrites=true&w=majority`)
+  .connect(`mongodb+srv://${login}:${pass}@cluster0.p4p8r5j.mongodb.net/${DBname}?retryWrites=true&w=majority`)
   .then(() => {
     console.log('DB ok');
   })
@@ -38,7 +42,7 @@ app.patch(
   PostController.update,
 );
 
-const PORT = 3000;
+
 
 app.listen(PORT, (err) => {
   if (err) {
