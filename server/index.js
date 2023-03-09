@@ -1,12 +1,13 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
+import multer from 'multer';
+import fs from 'fs';
+import cors from 'cors';
 
-import * as Validation from './vlidations/validations.js';
-import checkAuth from './utils/checkAuth.js';
+import { handleValidationErrors, checkAuth, Validation } from './utils/index.js';
 import { UserController, PostController } from './contrellers/index.js';
 
-// .env
 dotenv.config();
 const login = process.env.DB_USER;
 const pass = process.env.DB_PASSWORD;
@@ -24,11 +25,35 @@ mongoose
 
 const app = express();
 
-app.use(express.json())
+const storage = multer.diskStorage({
+  destination: (_, __, cb) => {
+    if (!fs.existsSync('uploads')) {
+      fs.mkdirSync('uploads');
+    }
+    cb(null, 'uploads');
+  },
+  filename: (_, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
 
-app.post('/auth/login', Validation.login, UserController.login);
-app.post('/auth/register', Validation.register, UserController.register);
+const upload = multer({ storage });
+
+app.use(express.json());
+app.use(cors());
+app.use('/uploads', express.static('uploads'));
+
+app.post('/auth/login', Validation.login, handleValidationErrors, UserController.login);
+app.post('/auth/register', Validation.register, handleValidationErrors, UserController.register);
 app.get('/auth/me', checkAuth, UserController.getMe);
+
+app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
+  res.json({
+    url: `/uploads/${req.file.originalname}`,
+  });
+});
+
+app.get('/tags', PostController.getLastTags);
 
 app.get('/posts', PostController.getAll);
 app.get('/posts/:id', PostController.getOne);
@@ -39,10 +64,9 @@ app.patch(
   '/posts/:id',
   checkAuth,
   Validation.postCreate,
+  handleValidationErrors,
   PostController.update,
 );
-
-
 
 app.listen(PORT, (err) => {
   if (err) {

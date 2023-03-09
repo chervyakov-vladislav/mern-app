@@ -1,16 +1,14 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { validationResult } from 'express-validator';
+import * as dotenv from 'dotenv';
 
 import UserModel from '../models/User.js';
 
+dotenv.config();
+const jwtKey = process.env.TOKEN_SECRET;
+
 export const register = async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json(errors.array())
-    }
-
     const password = req.body.password;
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
@@ -27,7 +25,7 @@ export const register = async (req, res) => {
     const token = jwt.sign({
       _id: user._id
     },
-    'secretKey',
+    jwtKey,
     {
       expiresIn: '30d',
     });
@@ -71,7 +69,7 @@ export const login = async (req, res) => {
     const token = jwt.sign({
         _id: user._id
       },
-      'secretKey',
+      jwtKey,
       {
         expiresIn: '30d',
     });
