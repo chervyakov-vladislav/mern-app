@@ -7,6 +7,11 @@ export const getLastTags = async (req, res) => {
     const tags = posts
       .map((obj) => obj.tags)
       .flat()
+      .reduce((arr, tag) => {
+        const result = [...new Set(arr)];
+        result.push(tag);
+        return [...new Set(result)];
+      }, [])
       .slice(0, 5);
 
     res.json(tags);
