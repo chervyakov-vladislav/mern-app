@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Button from '@mui/material/Button';
@@ -13,10 +13,8 @@ export const Header = () => {
   const isAuth = useSelector(selectIsAuth);
 
   const onClickLogout = () => {
-    if (window.confirm('Вы действительно хотите выйти?')) {
-      dispatch(logout());
-      window.localStorage.removeItem('token');
-    }
+    dispatch(logout());
+    window.localStorage.removeItem('token');
   };
 
   return (
