@@ -130,7 +130,7 @@ export const AddPost = () => {
           </Button>
           <img
             className={styles.image}
-            src={`http://localhost:3000${imageUrl}`}
+            src={`https://mern-app-blog.onrender.com${imageUrl}`}
             alt="Uploaded"
           />
         </>

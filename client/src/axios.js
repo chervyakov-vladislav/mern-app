@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const server = 'http://localhost:3000';
+const server = 'https://mern-app-blog.onrender.com';
 
 const instance = axios.create({
   baseURL: server,

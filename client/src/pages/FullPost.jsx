@@ -32,7 +32,7 @@ export const FullPost = () => {
       <Post
         id={data._id}
         title={data.title}
-        imageUrl={data.imageUrl ? `http://localhost:3000${data.imageUrl}` : ''}
+        imageUrl={data.imageUrl ? `https://mern-app-blog.onrender.com${data.imageUrl}` : ''}
         user={data.user}
         createdAt={data.createdAt}
         viewsCount={data.viewsCount}

@@ -39,7 +39,7 @@ export const Home = () => {
               key={index}
               id={obj._id}
               title={obj.title}
-              imageUrl={obj.imageUrl ? `http://localhost:3000${obj.imageUrl}` : ''}
+              imageUrl={obj.imageUrl ? `https://mern-app-blog.onrender.com${obj.imageUrl}` : ''}
               user={obj.user}
               createdAt={obj.createdAt}
               viewsCount={obj.viewsCount}
